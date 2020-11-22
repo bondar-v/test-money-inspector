@@ -41,6 +41,18 @@ namespace MoneyInspector.Server.Services
             }).ToList();
         }
 
+        public List<CategoryModel> GetCategoriesByPeriod(DateTimePeriod period)
+        {
+            var categories = categoriesRepository.GetByFilter(category => true).ToList();
+            var notes = notesRepository.GetByFilter(note => note.CreatedAt >= period.StartDate && note.CreatedAt <= period.EndDate).ToList();
+
+            return categories.Select(category => new CategoryModel
+            {
+                Id = category.Id,
+                Name = category.Name
+            }).ToList();
+        }
+
         public List<CategorySumModel> GetCategorySumsByPeriod(DateTimePeriod period)
         {
             var categories = categoriesRepository.GetByFilter(category => true).ToList();

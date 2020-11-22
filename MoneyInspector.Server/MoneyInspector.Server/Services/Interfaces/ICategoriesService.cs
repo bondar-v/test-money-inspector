@@ -13,5 +13,7 @@ namespace MoneyInspector.Server.Services.Interfaces
         List<CategorySumModel> GetCategorySumsByPeriod(DateTimePeriod period);
 
         List<CategoryModel> GetAllCategories();
+
+        List<CategoryModel> GetCategoriesByPeriod(DateTimePeriod period);
     }
 }

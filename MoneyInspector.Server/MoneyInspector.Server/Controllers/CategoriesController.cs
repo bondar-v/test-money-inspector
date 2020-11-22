@@ -14,10 +14,12 @@ namespace MoneyInspector.Server.Controllers
     public class CategoriesController : ControllerBase
     {
         private readonly ICategoriesService categoriesService;
+        private readonly IDateTimeParser dateTimeParser;
 
-        public CategoriesController(ICategoriesService categoriesService)
+        public CategoriesController(ICategoriesService categoriesService, IDateTimeParser dateTimeParser)
         {
             this.categoriesService = categoriesService;
+            this.dateTimeParser = dateTimeParser;
         }
 
         [HttpGet("getAllWithSum")]
@@ -30,6 +32,18 @@ namespace MoneyInspector.Server.Controllers
         public IActionResult GetAllCategoriesWithoutSum()
         {
             return Ok(categoriesService.GetAllCategories());
+        }
+
+        [HttpGet("getByPeriodWithSum")]
+        public IActionResult GetCategoriesByPeriodWithSum(long startDateMs, long endDateMs)
+        {
+            return Ok(categoriesService.GetCategorySumsByPeriod(dateTimeParser.GetDateTimePeriod(startDateMs, endDateMs)));
+        }
+
+        [HttpGet("getByPeriodWithoutSum")]
+        public IActionResult GetCategoriesByPeriodWithoutSum(long startDateMs, long endDateMs)
+        {
+            return Ok(categoriesService.GetCategoriesByPeriod(dateTimeParser.GetDateTimePeriod(startDateMs, endDateMs)));
         }
     }
 }

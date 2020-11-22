@@ -14,11 +14,12 @@ namespace MoneyInspector.Server.Controllers
     public class NotesController : ControllerBase
     {
         private readonly INotesService notesService;
-        private DateTime unixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+        private readonly IDateTimeParser dateTimeParser;
 
-        public NotesController(INotesService notesService)
+        public NotesController(INotesService notesService, IDateTimeParser dateTimeParser)
         {
             this.notesService = notesService;
+            this.dateTimeParser = dateTimeParser;
         }
 
         [HttpPost("add")]
@@ -48,7 +49,7 @@ namespace MoneyInspector.Server.Controllers
         [HttpGet("getByPeriod")]
         public IActionResult GetNotes(long startDateMs, long endDateMs)
         {
-            return Ok();
+            return Ok(notesService.GetNotesByPeriod(dateTimeParser.GetDateTimePeriod(startDateMs, endDateMs)));
         }
 
         [HttpGet("getAll")]
